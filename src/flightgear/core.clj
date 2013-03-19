@@ -12,7 +12,8 @@
 (defn send-message [msg]
   (doto @out
     (.print (str msg "\r\n"))
-    (.flush)))
+    (.flush))
+  nil)
   
 (defn connect [host port]
   (println "Connecting to" host "on" port)
@@ -46,6 +47,9 @@
   (send-message (str "dump " property))
   (property-list-to-map (get-property-list)))
 
+(defn set-property [property value]
+  (send-message (str "set " property " " value)))
+
 (defn position []
   (request-property-list "/position"))
 
@@ -54,9 +58,6 @@
 
 (defn velocities []
   (request-property-list "/velocities"))
-
-(defn set-property [property value]
-  (send-message (str "set " property " " value)))
 
 (defn starter! [value]
   (set-property "/controls/switches/starter" (if value "true" "false")))
