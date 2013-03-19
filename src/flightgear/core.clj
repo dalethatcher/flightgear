@@ -54,3 +54,24 @@
 
 (defn velocities []
   (request-property-list "/velocities"))
+
+(defn set-property [property value]
+  (send-message (str "set " property " " value)))
+
+(defn starter! [value]
+  (set-property "/controls/switches/starter" (if value "true" "false")))
+
+(defn aileron! [value]
+  (set-property "/controls/flight/aileron" value))
+
+(defn elevator! [value]
+  (set-property "/controls/flight/elevator" value))
+
+(defn rudder![value]
+  (set-property "/controls/flight/rudder" value))
+
+(defn flaps! [value]
+  (set-property "/controls/flight/flaps" value))
+
+(defn throttle! [value]
+  (set-property "/controls/engines/engine/throttle" value))
