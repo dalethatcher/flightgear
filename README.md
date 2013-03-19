@@ -46,12 +46,12 @@ You'll briefly have the elation of flying, most likely followed by a nice crash.
 See http://www.aerospaceweb.org/question/design/q0101.shtml for a description of aircraft control surfaces.
 
 ```clojure
-(starter! true|false) - Turn the starter key, don't forget to turn off!
-(throttle! 0..1) - Power to the engine.
-(flaps! 0..1) - Sort of a fixed up and down mostly used for take off and landing.
-(rudder! -1..1) - Steer left and right (yaw).
-(elevator! -1..1) - Up and down (pitch).
-(aileron! -1..1) - Left and right with rotate (roll).
+(starter! true|false) ; Turn the starter key, don't forget to turn off!
+(throttle! 0..1)      ; Power to the engine.
+(flaps! 0..1)         ; Sort of a fixed up and down mostly used for take off and landing.
+(rudder! -1..1)       ; Steer left and right (yaw).
+(elevator! -1..1)     ; Up and down (pitch).
+(aileron! -1..1)      ; Left and right with rotate (roll).
 ```
 
 ## License
