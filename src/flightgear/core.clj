@@ -1,7 +1,9 @@
 (ns flightgear.core
   (:require [clojure.java.io :as io])
+  (:require [clojure.zip :as zip])
+  (:require [clojure.xml :as xml])
   (:import [java.net Socket]
-           [java.io PrintWriter]))
+           [java.io PrintWriter ByteArrayInputStream]))
 
 (def connection (atom nil))
 (def in (atom nil))
@@ -9,7 +11,7 @@
 
 (defn send-message [msg]
   (doto @out
-    (.print msg "\r\n")
+    (.print (str msg "\r\n"))
     (.flush)))
   
 (defn connect [host port]
@@ -22,8 +24,33 @@
     true))
 
 (defn get-property-list []
-  (take-while #(not (= "</PropertyList>" %)) (repeatedly #(.readLine @in))))
+  (apply str (concat
+               (take-while #(not (= "</PropertyList>" %)) (repeatedly #(.readLine @in)))
+               "</PropertyList>")))
+
+(defn property-node-to-entry [node]
+  (let [tag (node :tag)
+        type ((node :attrs) :type)
+        content (first (node :content))]
+    (cond
+      (= type "double") [tag (read-string content)]
+      :default [tag content])))
+
+(defn property-list-to-map [property-list]
+  (let [list-bytes (ByteArrayInputStream. (.getBytes property-list))
+        tree (zip/xml-zip (xml/parse list-bytes))
+        properties (zip/children tree)]
+    (reduce conj {} (map property-node-to-entry properties))))
+
+(defn request-property-list [property]
+  (send-message (str "dump " property))
+  (property-list-to-map (get-property-list)))
 
 (defn position []
-  (send-message "dump /position")
-  (get-property-list))
+  (request-property-list "/position"))
+
+(defn orientation []
+  (request-property-list "/orientation"))
+
+(defn velocities []
+  (request-property-list "/velocities"))
