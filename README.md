@@ -12,7 +12,11 @@ A flightgear library for the London Clojure Dojo.
 
 # Leinigen
 
-Add "[org.clojars.dalethatcher/flightgear "0.1.0-SNAPSHOT"]" to your project.clj.
+Add to your project.clj:
+
+```clojure
+  :dependencies [[org.clojars.dalethatcher/flightgear "0.1.0-SNAPSHOT"]]
+```
 
 ## API
 
