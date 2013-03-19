@@ -8,7 +8,7 @@ A flightgear library for the London Clojure Dojo.
 
 1) Download FlightGear for your platform from http://www.flightgear.org/download/
 
-2) Run with the comman line parameter "--telnet=5401"
+2) Run with the command line parameter "--telnet=5401"
 
 # Leinigen
 
@@ -18,6 +18,7 @@ Add "[org.clojars.dalethatcher/flightgear "0.1.0-SNAPSHOT"]" to your project.clj
 
 # Quick Start
 
+```clojure
 > (use 'flightgear.api)
 > (connect "localhost" 5401)
 > (starter! true) ; wait until engine started
@@ -30,6 +31,7 @@ You'll briefly have the elation of flying, most likely followed by a nice crash.
 
 # Telemetry
 
+```clojure
 > (position)
 {:ground-elev-ft 1.602206714, :ground-elev-m 0.4883526066, :altitude-ft 6.017082775, :latitude-deg 37.62871089, :longitude-deg -122.3933408}
 > (orientation)
@@ -42,6 +44,7 @@ flightgear-test.core=>
 
 See http://www.aerospaceweb.org/question/design/q0101.shtml for a description of aircraft control surfaces.
 
+```clojure
 (starter! true|false) - Turn the starter key, don't forget to turn off!
 (throttle! 0..1) - Power to the engine.
 (flaps! 0..1) - Sort of a fixed up and down mostly used for take off and landing.
