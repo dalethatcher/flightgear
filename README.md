@@ -26,6 +26,7 @@ Add "[org.clojars.dalethatcher/flightgear "0.1.0-SNAPSHOT"]" to your project.clj
 > (flaps! 0.5)
 > (throttle! 1)  ; wait for a little while and you should be airbourne
 > (rudder! 0.1) ; steer a bit to the right (single props tend to veer to one side)
+```
 
 You'll briefly have the elation of flying, most likely followed by a nice crash.
 
@@ -38,7 +39,7 @@ You'll briefly have the elation of flying, most likely followed by a nice crash.
 {:roll-deg -0.2482645472, :heading-deg 117.8881856, :pitch-deg 2.792487719}
 > (velocities)
 {:wBody-fps 1.462199396E-8, :vBody-fps 1.285159097E-10, :uBody-fps -2.054781393E-9}
-flightgear-test.core=> 
+```
 
 # Controls
 
@@ -51,6 +52,7 @@ See http://www.aerospaceweb.org/question/design/q0101.shtml for a description of
 (rudder! -1..1) - Steer left and right (yaw).
 (elevator! -1..1) - Up and down (pitch).
 (aileron! -1..1) - Left and right with rotate (roll).
+```
 
 ## License
 
