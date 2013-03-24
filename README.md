@@ -34,15 +34,19 @@ Add to your project.clj:
 
 You'll briefly have the elation of flying, most likely followed by a nice crash.
 
-# Telemetry
+# Instruments
+
+Remember these values will have lag and some inaccuracy, depending on local conditions.
 
 ```clojure
-> (position)
-{:ground-elev-ft 1.602206714, :ground-elev-m 0.4883526066, :altitude-ft 6.017082775, :latitude-deg 37.62871089, :longitude-deg -122.3933408}
-> (orientation)
-{:roll-deg -0.2482645472, :heading-deg 117.8881856, :pitch-deg 2.792487719}
-> (velocities)
-{:wBody-fps 1.462199396E-8, :vBody-fps 1.285159097E-10, :uBody-fps -2.054781393E-9}
+> (indicated-airspeed-kt)
+76.08771873
+> (indicated-altitude-ft)
+2271.735558
+> (indicated-attitude)
+{:indicated-roll-deg -26.59438056, :indicated-pitch-deg 1.811541719}
+> (indicated-heading-deg)
+110.7191063
 ```
 
 # Controls
@@ -56,6 +60,19 @@ See http://www.aerospaceweb.org/question/design/q0101.shtml for a description of
 (rudder! -1..1)       ; Steer left and right (yaw).
 (elevator! -1..1)     ; Up and down (pitch).
 (aileron! -1..1)      ; Left and right with rotate (roll).
+```
+
+# Telemetry
+
+These are direct values from the flight simulator, aka cheating! :)
+
+```clojure
+> (position)
+{:ground-elev-ft 1.602206714, :ground-elev-m 0.4883526066, :altitude-ft 6.017082775, :latitude-deg 37.62871089, :longitude-deg -122.3933408}
+> (orientation)
+{:roll-deg -0.2482645472, :heading-deg 117.8881856, :pitch-deg 2.792487719}
+> (velocities)
+{:wBody-fps 1.462199396E-8, :vBody-fps 1.285159097E-10, :uBody-fps -2.054781393E-9}
 ```
 
 ## License

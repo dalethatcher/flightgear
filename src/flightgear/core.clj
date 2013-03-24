@@ -3,7 +3,7 @@
   (:require [clojure.zip :as zip])
   (:require [clojure.xml :as xml])
   (:import [java.net Socket]
-           [java.io PrintWriter ByteArrayInputStream]))
+           [java.io PrintWriter ByteArrayInputStream StringReader]))
 
 (def connection (atom nil))
 (def in (atom nil))
@@ -50,6 +50,34 @@
 (defn set-property [property value]
   (send-message (str "set " property " " value)))
 
+(defn read-to-prompt []
+  (let [prompt (seq "/> ")
+        initial-acc (take (count prompt) (repeatedly #(char (.read @in))))]
+    (loop [result []
+           acc initial-acc]
+      (if (= prompt acc)
+        (apply str result)
+        (recur (conj result (first acc))
+               (conj (vec (rest acc)) (char (.read @in))))))))
+
+(defn ls-output-line-to-entry [line]
+  (let [[_ name value type] (re-find #"([a-z-]+).*'([0-9a-z.-]*)'.*\(([a-z]+)\)" line)]
+    (if (= "double" type)
+      [(keyword name) (read-string value)]
+      nil)))
+
+(defn ls-output-to-map [ls-output]
+  (with-open [in (io/reader (StringReader. ls-output))]
+    (reduce conj {} (map ls-output-line-to-entry (line-seq in)))))
+
+(defn read-properties [directory]
+  (send-message "prompt")
+  (read-to-prompt)
+  (send-message (str "ls " directory))
+  (let [raw-result (read-to-prompt)]
+    (send-message "data")
+    (ls-output-to-map raw-result)))
+
 (defn position []
   (request-property-list "/position"))
 
@@ -76,3 +104,17 @@
 
 (defn throttle! [value]
   (set-property "/controls/engines/engine/throttle" value))
+
+(defn indicated-airspeed-kt []
+  ((read-properties "/instrumentation/airspeed-indicator") :indicated-speed-kt))
+
+(defn indicated-altitude-ft []
+  ((read-properties "/instrumentation/altimeter") :indicated-altitude-ft))
+
+(defn indicated-attitude []
+  (let [properties (read-properties "/instrumentation/attitude-indicator")]
+    {:indicated-roll-deg (properties :indicated-roll-deg)
+     :indicated-pitch-deg (properties :indicated-pitch-deg)}))
+
+(defn indicated-heading-deg []
+    ((read-properties "/instrumentation/magnetic-compass") :indicated-heading-deg))

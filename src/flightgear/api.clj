@@ -40,3 +40,15 @@
 (defn throttle! "0 to 1 to set throttle"
   [value]
   (core/throttle! value))
+
+(defn indicated-airspeed-kt [] "indicated airspeed in knots"
+  (core/indicated-airspeed-kt))
+
+(defn indicated-altitude-ft [] "indicated altitude in feet"
+  (core/indicated-altitude-ft))
+
+(defn indicated-attitude [] "map of attitude in degrees, with keys :indicated-roll-deg and :indicated-pitch-deg"
+  (core/indicated-attitude))
+
+(defn indicated-heading-deg [] "indicated heading in degrees from magnetic compass"
+    (core/indicated-heading-deg))

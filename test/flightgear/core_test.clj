@@ -14,3 +14,12 @@
 (deftest can-parse-property-list
   (let [properties (fg/property-list-to-map property-list)]
     (is (= (properties :longitude-deg) -122.3933408))))
+
+(def ls-output (str "serviceable =\t'true'\t(bool)\r\n"
+                    "indicated-speed-kt =\t'2.136597038'\t(double)\r\n"
+                    "true-speed-kt =\t'2.155335677'\t(double)\r\n"
+                    "indicated-mach =\t'0.003230377164'\t(double)\r\n"))
+
+(deftest can-parse-ls-output
+  (let [properties (fg/ls-output-to-map ls-output)]
+    (is (= (properties :indicated-speed-kt) 2.136597038))))
