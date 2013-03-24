@@ -62,7 +62,7 @@
 
 (defn ls-output-line-to-entry [line]
   (let [[_ name value type] (re-find #"([a-z-]+).*'([0-9a-z.-]*)'.*\(([a-z]+)\)" line)]
-    (if (= "double" type)
+    (if (#{"double" "bool"} type)
       [(keyword name) (read-string value)]
       nil)))
 
@@ -118,3 +118,6 @@
 
 (defn indicated-heading-deg []
     ((read-properties "/instrumentation/magnetic-compass") :indicated-heading-deg))
+
+(defn engine-running? []
+  ((read-properties "/engines/engine") :running))

@@ -51,4 +51,7 @@
   (core/indicated-attitude))
 
 (defn indicated-heading-deg [] "indicated heading in degrees from magnetic compass"
-    (core/indicated-heading-deg))
+  (core/indicated-heading-deg))
+
+(defn engine-running? [] "true if the engine has started"
+  (core/engine-running?))
