@@ -25,7 +25,7 @@ Add to your project.clj:
 ```clojure
 > (use 'flightgear.api)
 > (connect "localhost" 5401)
-> (starter! true) ; wait until engine started
+> (starter! true) ; wait until engine started, 'engine-running?' can be used to query
 > (starter! false)
 > (flaps! 0.5)
 > (throttle! 1)  ; wait for a little while and you should be airbourne
@@ -47,6 +47,8 @@ Remember these values will have lag and some inaccuracy, depending on local cond
 {:indicated-roll-deg -26.59438056, :indicated-pitch-deg 1.811541719}
 > (indicated-heading-deg)
 110.7191063
+> (engine-running?)
+true
 ```
 
 # Controls
