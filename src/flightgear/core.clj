@@ -25,17 +25,17 @@
     true))
 
 (defn get-property-list []
-  (apply str (concat
-               (take-while #(not (= "</PropertyList>" %)) (repeatedly #(.readLine @in)))
-               "</PropertyList>")))
+  (apply str (concat (take-while #(not= "</PropertyList>" %)
+                                 (repeatedly #(.readLine @in)))
+                     "</PropertyList>")))
 
 (defn property-node-to-entry [node]
   (let [tag (node :tag)
         type ((node :attrs) :type)
         content (first (node :content))]
-    (cond
-      (= type "double") [tag (read-string content)]
-      :default [tag content])))
+    (if (= type "double")
+      [tag (read-string content)]
+      [tag content])))
 
 (defn property-list-to-map [property-list]
   (let [list-bytes (ByteArrayInputStream. (.getBytes property-list))
@@ -52,7 +52,7 @@
 
 (defn read-to-prompt []
   (let [prompt (seq "/> ")
-        initial-acc (take (count prompt) (repeatedly #(char (.read @in))))]
+        initial-acc (repeatedly (count prompt) #(char (.read @in)))]
     (loop [result []
            acc initial-acc]
       (if (= prompt acc)
@@ -62,9 +62,8 @@
 
 (defn ls-output-line-to-entry [line]
   (let [[_ name value type] (re-find #"([a-z-]+).*'([0-9a-z.-]*)'.*\(([a-z]+)\)" line)]
-    (if (#{"double" "bool"} type)
-      [(keyword name) (read-string value)]
-      nil)))
+    (when (#{"double" "bool"} type)
+      [(keyword name) (read-string value)])))
 
 (defn ls-output-to-map [ls-output]
   (with-open [in (io/reader (StringReader. ls-output))]
@@ -106,10 +105,10 @@
   (set-property "/controls/engines/engine/throttle" value))
 
 (defn indicated-airspeed-kt []
-  ((read-properties "/instrumentation/airspeed-indicator") :indicated-speed-kt))
+  (:indicated-speed-kt (read-properties "/instrumentation/airspeed-indicator")))
 
 (defn indicated-altitude-ft []
-  ((read-properties "/instrumentation/altimeter") :indicated-altitude-ft))
+  (:indicated-altitude-ft (read-properties "/instrumentation/altimeter")))
 
 (defn indicated-attitude []
   (let [properties (read-properties "/instrumentation/attitude-indicator")]
@@ -117,7 +116,7 @@
      :indicated-pitch-deg (properties :indicated-pitch-deg)}))
 
 (defn indicated-heading-deg []
-    ((read-properties "/instrumentation/magnetic-compass") :indicated-heading-deg))
+  (:indicated-heading-deg (read-properties "/instrumentation/magnetic-compass")))
 
 (defn engine-running? []
-  ((read-properties "/engines/engine") :running))
+  (:running (read-properties "/engines/engine")))
